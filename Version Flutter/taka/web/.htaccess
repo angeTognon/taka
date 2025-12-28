@@ -1,0 +1,32 @@
+# Configuration pour les URLs Flutter Web
+
+# Active la réécriture d'URL
+RewriteEngine On
+
+# Redirection de la route admin
+RewriteRule ^takaadmin$ /index.html [L,QSA]
+
+# Pour toutes les autres routes (sauf les fichiers existants)
+# Cela inclut les URLs de livres avec leur nom : /nom-du-livre/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /index.html [L,QSA]
+
+# Configuration pour les fichiers statiques
+<FilesMatch "\.(js|css|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|ico)$">
+  Header set Cache-Control "max-age=31536000, public"
+</FilesMatch>
+
+# Configuration pour index.html
+<FilesMatch "index.html$">
+  Header set Cache-Control "no-cache, no-store, must-revalidate"
+  Header set Pragma "no-cache"
+  Header set Expires 0
+</FilesMatch>
+
+# Configuration MIME types
+AddType application/javascript .js
+AddType text/css .css
+AddType image/svg+xml .svg
+
+

@@ -1,0 +1,35 @@
+{
+    "name": "TAKA - Librairie Africaine",
+    "short_name": "TAKA",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#F97316",
+    "theme_color": "#F97316",
+    "description": "La première plateforme panafricaine dédiée à la littérature africaine. Découvrez, lisez et publiez les histoires qui façonnent notre continent.",
+    "orientation": "portrait-primary",
+    "prefer_related_applications": false,
+    "icons": [
+        {
+            "src": "logo.jpeg",
+            "sizes": "192x192",
+            "type": "image/jpeg"
+        },
+        {
+            "src": "logo.jpeg",
+            "sizes": "512x512",
+            "type": "image/jpeg"
+        },
+        {
+            "src": "logo.jpeg",
+            "sizes": "192x192",
+            "type": "image/jpeg",
+            "purpose": "maskable"
+        },
+        {
+            "src": "logo.jpeg",
+            "sizes": "512x512",
+            "type": "image/jpeg",
+            "purpose": "maskable"
+        }
+    ]
+}

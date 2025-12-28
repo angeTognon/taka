@@ -1,0 +1,44 @@
+# Configuration Nginx pour Flutter Web TAKA
+# À placer dans votre configuration de serveur Nginx
+
+server {
+    listen 80;
+    server_name votre-domaine.com;
+    
+    root /chemin/vers/taka2/build/web;
+    index index.html;
+    
+    # Logs
+    access_log /var/log/nginx/taka_access.log;
+    error_log /var/log/nginx/taka_error.log;
+    
+    # Route admin
+    location /takaadmin {
+        try_files $uri /index.html;
+    }
+    
+    # Fichiers statiques avec cache
+    location ~* \.(js|css|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|ico)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+    
+    # Pas de cache pour index.html
+    location = /index.html {
+        add_header Cache-Control "no-cache, no-store, must-revalidate";
+        add_header Pragma "no-cache";
+        add_header Expires 0;
+    }
+    
+    # Toutes les autres routes redirigent vers index.html
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+    
+    # Configuration CORS si nécessaire
+    add_header Access-Control-Allow-Origin *;
+    add_header Access-Control-Allow-Methods "GET, POST, OPTIONS";
+    add_header Access-Control-Allow-Headers "Content-Type";
+}
+
+
