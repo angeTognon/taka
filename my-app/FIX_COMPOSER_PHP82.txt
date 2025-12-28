@@ -1,0 +1,18 @@
+# Solution pour le problème de compatibilité PHP 8.2 vs 8.4
+# Le serveur a PHP 8.2.29, mais composer.lock nécessite PHP 8.4+
+
+# OPTION 1 : Supprimer composer.lock et régénérer (RECOMMANDÉ)
+cd ~/domains/takaafrica.com/laravel
+rm composer.lock
+composer install --no-dev --optimize-autoloader
+
+# Si l'option 1 ne fonctionne pas, essayer l'OPTION 2
+
+# OPTION 2 : Forcer la mise à jour des dépendances pour PHP 8.2
+# cd ~/domains/takaafrica.com/laravel
+# composer update --lock --no-interaction
+# composer install --no-dev --optimize-autoloader
+
+# OPTION 3 : Si les deux premières options échouent, modifier composer.json temporairement
+# Modifier "php": "^8.2" dans composer.json pour forcer la compatibilité PHP 8.2
+

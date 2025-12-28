@@ -1,0 +1,44 @@
+# Debug de l'erreur 500
+
+# 1. Vérifier si index.php existe dans public_html
+cd ~/domains/takaafrica.com/public_html
+ls -la index.php
+
+# Si le fichier n'existe pas, le créer :
+cat > index.php << 'EOF'
+<?php
+
+use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
+
+define('LARAVEL_START', microtime(true));
+
+if (file_exists($maintenance = __DIR__.'/../laravel/storage/framework/maintenance.php')) {
+    require $maintenance;
+}
+
+require __DIR__.'/../laravel/vendor/autoload.php';
+
+/** @var Application $app */
+$app = require_once __DIR__.'/../laravel/bootstrap/app.php';
+
+$app->handleRequest(Request::capture());
+EOF
+
+# 2. Vérifier les logs Laravel
+cd ~/domains/takaafrica.com/laravel
+tail -100 storage/logs/laravel.log
+
+# 3. Vérifier les permissions
+chmod 644 ~/domains/takaafrica.com/public_html/index.php
+chmod -R 775 ~/domains/takaafrica.com/laravel/storage
+chmod -R 775 ~/domains/takaafrica.com/laravel/bootstrap/cache
+
+# 4. Vérifier que APP_DEBUG=true temporairement pour voir l'erreur
+cd ~/domains/takaafrica.com/laravel
+sed -i 's/APP_DEBUG=false/APP_DEBUG=true/' .env
+php artisan config:clear
+
+# 5. Tester à nouveau
+curl -I https://takaafrica.com
+

@@ -1,0 +1,42 @@
+# Commandes finales pour finaliser la mise en ligne
+
+# 1. Corriger l'erreur de view:cache (optionnel, pas critique)
+cd ~/domains/takaafrica.com/laravel
+mkdir -p storage/framework/views
+chmod -R 775 storage/framework/views
+
+# 2. Vérifier que index.php dans public_html pointe vers le bon chemin
+cd ~/domains/takaafrica.com/public_html
+cat index.php | head -20
+
+# Si le chemin n'est pas correct, le modifier :
+# Le fichier doit contenir : require __DIR__.'/../laravel/vendor/autoload.php';
+
+# 3. Vérifier que .env est bien configuré
+cd ~/domains/takaafrica.com/laravel
+cat .env | grep -E "APP_URL|DB_"
+
+# 4. Vérifier les permissions
+chmod -R 775 storage bootstrap/cache
+chmod -R 755 storage/framework
+
+# 5. Nettoyer et recréer les caches (optionnel)
+php artisan config:clear
+php artisan route:clear
+php artisan config:cache
+php artisan route:cache
+
+# 6. Vérifier la structure finale
+cd ~/domains/takaafrica.com
+echo "=== Structure des dossiers ==="
+ls -la
+echo ""
+echo "=== Contenu de public_html ==="
+ls -la public_html/ | head -10
+echo ""
+echo "=== Contenu de laravel ==="
+ls -la laravel/ | head -10
+
+# 7. Tester si le site répond (si curl est disponible)
+# curl -I https://takaafrica.com
+

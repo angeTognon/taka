@@ -1,0 +1,139 @@
+# Commandes pour finaliser la mise en ligne sur Hostinger
+# Vous êtes actuellement dans: ~/domains/takaafrica.com/public_html
+
+# ============================================
+# ÉTAPE 1 : Remonter au niveau du domaine
+# ============================================
+cd ~/domains/takaafrica.com
+
+# ============================================
+# ÉTAPE 2 : Créer le dossier laravel et déplacer le contenu
+# ============================================
+mkdir -p laravel
+mv public_html/app laravel/
+mv public_html/artisan laravel/
+mv public_html/bootstrap laravel/
+mv public_html/composer.json laravel/
+mv public_html/composer.lock laravel/
+mv public_html/config laravel/
+mv public_html/database laravel/
+mv public_html/package.json laravel/
+mv public_html/pharmaRh laravel/ 2>/dev/null || true
+mv public_html/resources laravel/
+mv public_html/routes laravel/
+mv public_html/storage laravel/
+mv public_html/vite.config.js laravel/ 2>/dev/null || true
+mv public_html/README.md laravel/ 2>/dev/null || true
+mv public_html/README_TAKA.md laravel/ 2>/dev/null || true
+mv public_html/GUIDE_DEPLOIEMENT.md laravel/ 2>/dev/null || true
+mv public_html/unzipper.php laravel/ 2>/dev/null || true
+mv public_html/nginx.conf.example laravel/ 2>/dev/null || true
+
+# Ne pas déplacer: public, .htaccess, backup, my-app-deploy-*.zip
+
+# ============================================
+# ÉTAPE 3 : Déplacer le contenu de public/ vers public_html/
+# ============================================
+cd public_html
+mv public/* .
+mv public/.* . 2>/dev/null || true
+rmdir public 2>/dev/null || true
+
+# ============================================
+# ÉTAPE 4 : Modifier index.php pour pointer vers ../laravel/
+# ============================================
+cat > index.php << 'EOF'
+<?php
+
+use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
+
+define('LARAVEL_START', microtime(true));
+
+if (file_exists($maintenance = __DIR__.'/../laravel/storage/framework/maintenance.php')) {
+    require $maintenance;
+}
+
+require __DIR__.'/../laravel/vendor/autoload.php';
+
+/** @var Application $app */
+$app = require_once __DIR__.'/../laravel/bootstrap/app.php';
+
+$app->handleRequest(Request::capture());
+EOF
+
+# ============================================
+# ÉTAPE 5 : Aller dans le dossier laravel et créer .env
+# ============================================
+cd ../laravel
+
+# Créer le fichier .env (vous devrez le modifier avec vos vraies informations)
+cat > .env << 'ENVEOF'
+APP_NAME="TAKA"
+APP_ENV=production
+APP_KEY=
+APP_DEBUG=false
+APP_URL=https://takaafrica.com
+
+LOG_CHANNEL=stack
+LOG_LEVEL=error
+
+DB_CONNECTION=mysql
+DB_HOST=localhost
+DB_PORT=3306
+DB_DATABASE=u914969601_takaapp
+DB_USERNAME=u914969601_takaapp
+DB_PASSWORD=Guyaapp02@
+
+SESSION_DRIVER=file
+SESSION_LIFETIME=120
+CACHE_DRIVER=file
+QUEUE_CONNECTION=sync
+ENVEOF
+
+echo "⚠️  IMPORTANT: Modifiez le fichier .env avec vos vraies informations de base de données!"
+echo "   Utilisez: nano .env"
+echo "   Ou éditez-le via le gestionnaire de fichiers Hostinger"
+
+# ============================================
+# ÉTAPE 6 : Installer les dépendances Composer
+# ============================================
+composer install --no-dev --optimize-autoloader
+
+# ============================================
+# ÉTAPE 7 : Générer la clé d'application
+# ============================================
+php artisan key:generate
+
+# ============================================
+# ÉTAPE 8 : Configurer les permissions
+# ============================================
+chmod -R 775 storage bootstrap/cache
+
+# ============================================
+# ÉTAPE 9 : Exécuter les migrations (après avoir configuré .env)
+# ============================================
+# php artisan migrate --force
+echo "⚠️  N'oubliez pas d'exécuter: php artisan migrate --force (après avoir configuré .env)"
+
+# ============================================
+# ÉTAPE 10 : Optimiser pour la production
+# ============================================
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+# ============================================
+# ÉTAPE 11 : Vérifier la structure
+# ============================================
+cd ~/domains/takaafrica.com
+echo ""
+echo "✅ Structure finale:"
+ls -la
+echo ""
+echo "📁 Contenu de public_html:"
+ls -la public_html/ | head -15
+echo ""
+echo "📁 Contenu de laravel:"
+ls -la laravel/ | head -15
+

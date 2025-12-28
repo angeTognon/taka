@@ -1,0 +1,23 @@
+# Corriger l'erreur : storage/framework/sessions/ manquant
+
+cd ~/domains/takaafrica.com/laravel
+
+# Créer tous les dossiers nécessaires dans storage/framework/
+mkdir -p storage/framework/sessions
+mkdir -p storage/framework/views
+mkdir -p storage/framework/cache
+mkdir -p storage/framework/cache/data
+mkdir -p storage/logs
+
+# Configurer les permissions
+chmod -R 775 storage
+chmod -R 775 bootstrap/cache
+
+# Vérifier que les dossiers existent
+ls -la storage/framework/
+
+# Optionnel : Vider les caches et recréer
+php artisan config:clear
+php artisan cache:clear
+php artisan config:cache
+

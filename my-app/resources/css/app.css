@@ -1,0 +1,62 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Custom styles for TAKA */
+.btn-primary {
+    background: #F97316;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-block;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+
+.btn-primary:hover {
+    background: #EA580C;
+}
+
+.restricted-page {
+    min-height: calc(100vh - 200px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.restricted-page h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 16px;
+}
+
+.restricted-page p {
+    font-size: 16px;
+    color: #6B7280;
+    margin-bottom: 24px;
+}
+
+.legal-page {
+    min-height: calc(100vh - 200px);
+    padding: 40px 20px;
+    background: #F9FAFB;
+}
+
+.legal-content {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 32px;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.faq-page {
+    min-height: calc(100vh - 200px);
+    padding: 40px 20px;
+    background: #F9FAFB;
+}
